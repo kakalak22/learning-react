@@ -26,9 +26,10 @@ class MovieTable extends Component {
   };
   render() {
     const { columns } = this.state;
-    const { movies, onDelete, onLike, sortColumn, onSort } = this.props;
+    const { movies, onDelete, onLike, sortColumn, onSort, onPageSizeChange } = this.props;
     return (
       <Table
+        onPageSizeChange={onPageSizeChange}
         onSort={onSort}
         columns={columns}
         sortColumn={sortColumn}
@@ -47,5 +48,6 @@ MovieTable.propTypes = {
   onDelete: PropTypes.func,
   onLike: PropTypes.func,
   onSort: PropTypes.func,
+  onPageSizeChange: PropTypes.func,
   sortColumn: PropTypes.object
 };

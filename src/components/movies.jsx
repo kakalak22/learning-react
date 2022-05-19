@@ -48,6 +48,11 @@ class Movies extends Component {
     this.setState({ sortColumn });
   };
 
+  handlePageSize = (numberOfItems) => {
+    const pageSize = Number.parseInt(numberOfItems);
+    this.setState({ pageSize });
+  };
+
   getPagedData = () => {
     const { currentPage, pageSize, movies: allMovies, selectedGenre, sortColumn } = this.state;
     const filtered =
@@ -83,6 +88,7 @@ class Movies extends Component {
                 onLike={this.handleLike}
                 onDelete={this.handleDelete}
                 onSort={this.handleSort}
+                onPageSizeChange={this.handlePageSize}
                 sortColumn={sortColumn}
               />
               <Pagination
