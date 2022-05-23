@@ -6,6 +6,7 @@ import { paginate } from '../utils/paginate';
 import ListGroup from './common/listgroup';
 import MovieTable from './movieTable';
 import _ from 'lodash';
+import { Outlet } from 'react-router';
 
 class Movies extends Component {
   state = {
@@ -100,6 +101,7 @@ class Movies extends Component {
             </div>
           </div>
         </div>
+        <Outlet />
       </React.Fragment>
     );
   }
