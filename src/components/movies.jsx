@@ -113,6 +113,8 @@ class Movies extends Component {
                 style={{ marginBottom: '30px' }}
                 type="text"
                 onChange={this.handleInputChange}
+                placeholder="Search here"
+                className="form-control"
               />
               <h5 style={{ marginBottom: '30px' }}>Showing {totalCount} movies in the database</h5>
               <MovieTable
