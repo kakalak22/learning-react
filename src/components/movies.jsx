@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { getMovies } from '../services/fakeMovieService';
 import { getGenres } from '../services/fakeGenreService';
-import Pagination from './common/pagination';
+import _ from 'lodash';
 import { paginate } from '../utils/paginate';
+import { Outlet } from 'react-router';
+import { Link } from 'react-router-dom';
+import Pagination from './common/pagination';
 import ListGroup from './common/listgroup';
 import MovieTable from './movieTable';
-import _ from 'lodash';
-import { Outlet } from 'react-router';
 
 class Movies extends Component {
   state = {
+    input: '',
     movies: [],
     genres: [],
     sortColumn: { path: undefined, order: 'asc' },
@@ -54,15 +56,33 @@ class Movies extends Component {
     this.setState({ pageSize });
   };
 
+  filterItems = (arr, query) => {
+    return arr.filter((el) => {
+      return el.title.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    });
+  };
+
   getPagedData = () => {
-    const { currentPage, pageSize, movies: allMovies, selectedGenre, sortColumn } = this.state;
-    const filtered =
-      selectedGenre && selectedGenre._id
+    const {
+      currentPage,
+      pageSize,
+      movies: allMovies,
+      selectedGenre,
+      sortColumn,
+      input
+    } = this.state;
+    const filtered = !input
+      ? selectedGenre && selectedGenre._id
         ? allMovies.filter((movie) => movie.genre._id === selectedGenre._id)
-        : allMovies;
+        : allMovies
+      : this.filterItems(allMovies, input);
     const sorted = _.orderBy(filtered, sortColumn.path, sortColumn.order);
     const movies = paginate(sorted, currentPage, pageSize);
     return { totalCount: filtered.length, movies };
+  };
+
+  handleInputChange = ({ target: input }) => {
+    this.setState({ input: input.value, selectedGenre: undefined });
   };
 
   render() {
@@ -73,7 +93,6 @@ class Movies extends Component {
     return (
       <React.Fragment>
         <div className="container">
-          <h1>Showing {totalCount} movies in the database</h1>
           <br />
           <div className="row">
             <div className="col-lg-2">
@@ -84,6 +103,18 @@ class Movies extends Component {
               />
             </div>
             <div className="col-lg-6">
+              <button className="btn btn-primary" style={{ marginBottom: '30px' }}>
+                <Link to="/new-movie" style={{ color: 'white' }}>
+                  New Movie
+                </Link>
+              </button>
+              <br />
+              <input
+                style={{ marginBottom: '30px' }}
+                type="text"
+                onChange={this.handleInputChange}
+              />
+              <h5 style={{ marginBottom: '30px' }}>Showing {totalCount} movies in the database</h5>
               <MovieTable
                 movies={movies}
                 onLike={this.handleLike}

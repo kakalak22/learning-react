@@ -13,6 +13,7 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
+    'react/display-name': 'off',
     'react/react-in-jsx-scope': 'off',
     'prettier/prettier': [
       'error',
