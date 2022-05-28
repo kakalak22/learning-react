@@ -1,12 +1,13 @@
 import Joi from 'joi-browser';
 import Form from './common/form';
-import { getMovie, saveMovie } from '../services/fakeMovieService';
-import { getGenres } from '../services/fakeGenreService';
+import { toast } from 'react-toastify';
+import { getMovie, saveMovie } from '../services/movieService';
+import { getGenres } from '../services/genreService';
 import { withRouter } from '../utils/withRouter';
 import { Navigate } from 'react-router';
 class MovieForm extends Form {
   state = {
-    data: { _id: '', title: '', genreId: '', numberInStock: '', dailyRentalRate: '' },
+    data: { title: '', genreId: '', numberInStock: '', dailyRentalRate: '' },
     genres: [],
     selectedOpt: [],
     errors: {},
@@ -14,19 +15,20 @@ class MovieForm extends Form {
   };
 
   schema = {
-    _id: Joi.string().allow(null, ''),
     title: Joi.string().required().label('Title'),
     numberInStock: Joi.number().integer().min(0).max(100).required().label('Stock'),
     dailyRentalRate: Joi.number().min(0).max(5).required().label('Rate'),
     genreId: Joi.string().required().label('Genre')
   };
 
-  componentDidMount = () => {
-    const genres = getGenres();
+  componentDidMount = async () => {
+    const { data: genres } = await getGenres();
     this.setState({ genres });
     const movieId = this.props.location.pathname;
+    console.log(movieId);
     if (movieId === '/new-movie') return;
-    const data = getMovie(this.props.id);
+    const { data } = await getMovie(this.props.id);
+    console.log(data);
     if (!data) {
       this.setState({ navigateStatus: true });
       return;
@@ -37,7 +39,6 @@ class MovieForm extends Form {
 
   mapToViewModel = (data) => {
     return {
-      _id: data._id,
       title: data.title,
       genreId: data.genre._id,
       numberInStock: data.numberInStock,
@@ -45,8 +46,17 @@ class MovieForm extends Form {
     };
   };
 
-  doSubmit = () => {
-    saveMovie(this.state.data);
+  doSubmit = async () => {
+    const { data } = this.state;
+    const id = this.props.param.id;
+    console.log(id);
+    try {
+      await saveMovie(id, data);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) toast('Not found');
+    } finally {
+      toast.success('Executed');
+    }
     this.props.navigate('/movies');
   };
 
