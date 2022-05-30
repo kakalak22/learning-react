@@ -6,12 +6,14 @@ const Option = ({ options, selectedOpt }) => {
       <option key={option._id} value={option._id}>
         {option.name}
       </option>
+    ) : selectedOpt[0]._id === option._id ? (
+      <option selected key={option._id} value={option._id}>
+        {option.name}
+      </option>
     ) : (
-      selectedOpt[0]._id !== option._id && (
-        <option key={option._id} value={option._id}>
-          {option.name}
-        </option>
-      )
+      <option key={option._id} value={option._id}>
+        {option.name}
+      </option>
     )
   );
 };

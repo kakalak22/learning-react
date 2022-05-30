@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SelectedOption from './selectedOption';
 import Option from './option';
 
 const Select = ({ selectedOpt, label, error, options, onChange, name }) => {
+  console.log(selectedOpt);
   return (
     <React.Fragment>
       <label htmlFor={name}>{label}</label>
       <div className="input-group mb-3">
         <select onChange={onChange} name={name} className="custom-select">
-          {selectedOpt && <SelectedOption selectedOpt={selectedOpt} />}
           <Option selectedOpt={selectedOpt} options={options} />
         </select>
         <div className="input-group-append">
