@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Option from './option';
 
 const Select = ({ selectedOpt, label, error, options, onChange, name }) => {
-  console.log(selectedOpt);
   return (
     <React.Fragment>
       <label htmlFor={name}>{label}</label>

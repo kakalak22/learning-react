@@ -3,6 +3,7 @@ import Joi from 'joi-browser';
 import Form from './common/form';
 import auth from '../services/authService';
 import { withRouter } from '../utils/withRouter';
+import { Navigate } from 'react-router';
 
 class LoginForm extends Form {
   state = {
@@ -18,8 +19,9 @@ class LoginForm extends Form {
   doSubmit = async () => {
     try {
       const { data } = this.state;
+      const { location } = this.props;
       await auth.login(data.username, data.password);
-      window.location = '/';
+      window.location = location.state ? location.state : '/';
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = {};
@@ -30,6 +32,8 @@ class LoginForm extends Form {
   };
 
   render() {
+    if (auth.getUser()) return <Navigate to="/" />;
+
     return (
       <div>
         <h1>Login</h1>

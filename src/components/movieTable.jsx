@@ -5,38 +5,45 @@ import Table from './common/table';
 import { Link } from 'react-router-dom';
 
 class MovieTable extends Component {
-  state = {
-    columns: [
-      {
-        label: 'Title',
-        path: 'title',
-        content: (movie) => <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
-      },
-      { label: 'Genre', path: 'genre.name' },
-      { label: 'Stock', path: 'numberInStock' },
-      { label: 'Rate', path: 'dailyRentalRate' },
-      {
-        key: '1',
-        content: (item) => <Like status={item.like} item={item} onLike={this.props.onLike} />
-      },
-      {
-        key: '2',
-        content: (item) => (
-          <button className="btn btn-danger" onClick={() => this.props.onDelete(item)}>
-            Remove
-          </button>
-        )
-      }
-    ]
+  columns = [
+    {
+      label: 'Title',
+      path: 'title',
+      content: (movie) => <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+    },
+    { label: 'Genre', path: 'genre.name' },
+    { label: 'Stock', path: 'numberInStock' },
+    { label: 'Rate', path: 'dailyRentalRate' },
+    {
+      key: '1',
+      content: (item) => <Like status={item.like} item={item} onLike={this.props.onLike} />
+    }
+  ];
+
+  deleteColumn = {
+    key: '2',
+    content: (item) => (
+      <button className="btn btn-danger" onClick={() => this.props.onDelete(item)}>
+        Remove
+      </button>
+    )
   };
+
+  constructor(props) {
+    super(props);
+    const { user } = props;
+    if (user && user.isAdmin) {
+      this.columns.push(this.deleteColumn);
+    }
+  }
+
   render() {
-    const { columns } = this.state;
     const { movies, onDelete, onLike, sortColumn, onSort, onPageSizeChange } = this.props;
     return (
       <Table
         onPageSizeChange={onPageSizeChange}
         onSort={onSort}
-        columns={columns}
+        columns={this.columns}
         sortColumn={sortColumn}
         data={movies}
         onLike={onLike}
@@ -54,5 +61,6 @@ MovieTable.propTypes = {
   onLike: PropTypes.func,
   onSort: PropTypes.func,
   onPageSizeChange: PropTypes.func,
-  sortColumn: PropTypes.object
+  sortColumn: PropTypes.object,
+  user: PropTypes.object
 };
