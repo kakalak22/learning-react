@@ -5,11 +5,13 @@ import _ from 'lodash';
 import { paginate } from '../utils/paginate';
 import { Outlet } from 'react-router';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { toast, ToastContainer } from 'react-toastify';
 import Pagination from './common/pagination';
 import ListGroup from './common/listgroup';
 import MovieTable from './movieTable';
 import SearchBox from './common/searchBox';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 class Movies extends Component {
@@ -93,10 +95,10 @@ class Movies extends Component {
   };
 
   render() {
-    const { length: count } = this.state.movies;
     const { currentPage, pageSize, sortColumn, selectedGenre, genres, input } = this.state;
     const { totalCount, movies } = this.getPagedData();
-    if (count === 0) return <h1>There is no movie in database</h1>;
+    const { user } = this.props;
+
     return (
       <React.Fragment>
         <ToastContainer />
@@ -111,15 +113,18 @@ class Movies extends Component {
               />
             </div>
             <div className="col-lg-6">
-              <button className="btn btn-primary" style={{ marginBottom: '30px' }}>
-                <Link to="/new-movie" style={{ color: 'white' }}>
-                  New Movie
-                </Link>
-              </button>
+              {user && (
+                <button className="btn btn-primary" style={{ marginBottom: '30px' }}>
+                  <Link to="/new-movie" style={{ color: 'white' }}>
+                    New Movie
+                  </Link>
+                </button>
+              )}
               <br />
-              <SearchBox value={input} onChange={this.handleInputChange} />
               <h5 style={{ marginBottom: '30px' }}>Showing {totalCount} movies in the database</h5>
+              <SearchBox value={input} onChange={this.handleInputChange} />
               <MovieTable
+                user={user}
                 movies={movies}
                 onLike={this.handleLike}
                 onDelete={this.handleDelete}
@@ -143,3 +148,7 @@ class Movies extends Component {
 }
 
 export default Movies;
+
+Movies.propTypes = {
+  user: PropTypes.object
+};

@@ -13,6 +13,7 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
+    "no-empty": [2, { "allowEmptyCatch": true }],
     'react/display-name': 'off',
     'react/react-in-jsx-scope': 'off',
     'prettier/prettier': [
@@ -21,5 +22,6 @@ module.exports = {
         endOfLine: 'auto'
       }
     ]
-  }
+  },
+
 };

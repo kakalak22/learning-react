@@ -34,7 +34,6 @@ class MovieForm extends Form {
       const selectedOpt = this.state.genres.filter((genre) => genre._id === data.genre._id);
       this.setState({ selectedOpt, data: this.mapToViewModel(data) });
     } catch (ex) {
-      console.log(ex);
       if (ex.response && ex.response.status === 404) {
         this.setState({ navigateStatus: true });
       }
@@ -58,7 +57,6 @@ class MovieForm extends Form {
   doSubmit = async () => {
     const { data } = this.state;
     const id = this.props.param.id;
-    console.log(id);
     try {
       await saveMovie(id, data);
     } catch (ex) {
