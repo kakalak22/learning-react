@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Like from '../like';
 import Table from './common/table';
 import { Link } from 'react-router-dom';
+import auth from '../services/authService';
 
 class MovieTable extends Component {
   columns = [
@@ -29,9 +30,9 @@ class MovieTable extends Component {
     )
   };
 
-  constructor(props) {
-    super(props);
-    const { user } = props;
+  constructor() {
+    super();
+    const user = auth.getUser();
     if (user && user.isAdmin) {
       this.columns.push(this.deleteColumn);
     }

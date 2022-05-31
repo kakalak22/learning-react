@@ -124,7 +124,6 @@ class Movies extends Component {
               <h5 style={{ marginBottom: '30px' }}>Showing {totalCount} movies in the database</h5>
               <SearchBox value={input} onChange={this.handleInputChange} />
               <MovieTable
-                user={user}
                 movies={movies}
                 onLike={this.handleLike}
                 onDelete={this.handleDelete}
