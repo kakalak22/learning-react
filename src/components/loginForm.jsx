@@ -1,5 +1,5 @@
 import React from 'react';
-import Joi from 'joi-browser';
+import Joi from 'joi';
 import Form from './common/form';
 import auth from '../services/authService';
 import { withRouter } from '../utils/withRouter';
@@ -11,10 +11,10 @@ class LoginForm extends Form {
     errors: {}
   };
 
-  schema = {
-    username: Joi.string().required().label('Username'),
-    password: Joi.string().required().label('Password')
-  };
+  schema = Joi.object({
+    username: Joi.string().trim().required().label('Username'),
+    password: Joi.string().trim().required().label('Password')
+  });
 
   doSubmit = async () => {
     try {

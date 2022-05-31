@@ -1,4 +1,4 @@
-import Joi from 'joi-browser';
+import Joi from 'joi';
 import Form from './common/form';
 import { toast } from 'react-toastify';
 import { getMovie, saveMovie } from '../services/movieService';
@@ -14,12 +14,12 @@ class MovieForm extends Form {
     navigateStatus: false
   };
 
-  schema = {
-    title: Joi.string().required().label('Title'),
+  schema = Joi.object({
+    title: Joi.string().trim().required().label('Title'),
     numberInStock: Joi.number().integer().min(0).max(100).required().label('Stock'),
     dailyRentalRate: Joi.number().min(0).max(5).required().label('Rate'),
-    genreId: Joi.string().required().label('Genre')
-  };
+    genreId: Joi.string().trim().required().label('Genre')
+  });
 
   populateGenres = async () => {
     const { data: genres } = await getGenres();
