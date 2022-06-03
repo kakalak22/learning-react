@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { getMovies, deleteMovie } from '../services/movieService.js';
 import { getGenres } from '../services/genreService';
+import authService from '../services/authService.js';
 import _ from 'lodash';
 import { paginate } from '../utils/paginate';
 import { Outlet } from 'react-router';
@@ -14,6 +15,8 @@ import SearchBox from './common/searchBox';
 
 import 'react-toastify/dist/ReactToastify.css';
 
+const user = authService.getUser();
+
 class Movies extends Component {
   state = {
     input: '',
@@ -26,6 +29,12 @@ class Movies extends Component {
   };
 
   async componentDidMount() {
+    if (user && !user.isAdmin) {
+      setTimeout(() => {
+        toast.info('Admin account: User: bao@gmail.com Password: 123456', { autoClose: false });
+      }, 1000);
+    }
+
     const { data } = await getGenres();
     const genres = [{ _id: '', name: 'All Genres' }, ...data];
     const { data: movies } = await getMovies();
